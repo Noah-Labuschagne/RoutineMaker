@@ -22,6 +22,8 @@ ELEMENT_DB = {
     for _, row in elements_df.iterrows()
 }
 
+#H5 scoring logic
+
 def calculate_h5_score(routine):
     seen = set()
     unique_elements = []
@@ -52,3 +54,147 @@ def calculate_h5_score(routine):
         "group_bonus": round(group_bonus, 2),
         "total_d_score": round(total_difficulty + group_bonus, 2)
     }
+
+
+#H4 scoring logic
+
+def calculate_h4_score(routine):
+    seen = set()
+    unique_elements = []
+
+    for element in routine:
+        if element not in ELEMENT_DB:
+            raise ValueError(f"Invalid element: {element}")
+        if element not in seen:
+            seen.add(element)
+            unique_elements.append(element)
+
+    scored_elements = sorted(
+        unique_elements,
+        key=lambda el: difficulty_scale[ELEMENT_DB[el]["difficulty"]],
+        reverse=True
+    )[:6]
+
+    total_difficulty = sum(
+        difficulty_scale[ELEMENT_DB[el]["difficulty"]] for el in scored_elements
+    )
+
+    unique_groups = {ELEMENT_DB[el]["group"] for el in scored_elements}
+    group_bonus = 0.5 * len(unique_groups)
+
+    return {
+        "counted_elements": scored_elements,
+        "difficulty_score": round(total_difficulty, 2),
+        "group_bonus": round(group_bonus, 2),
+        "total_d_score": round(total_difficulty + group_bonus, 2)
+    }
+
+
+# H3 scoring logic
+def calculate_h3_score(routine):
+    seen = set()
+    unique_elements = []
+
+    for element in routine:
+        if element not in ELEMENT_DB:
+            raise ValueError(f"Invalid element: {element}")
+        if element not in seen:
+            seen.add(element)
+            unique_elements.append(element)
+
+    scored_elements = sorted(
+        unique_elements,
+        key=lambda el: difficulty_scale[ELEMENT_DB[el]["difficulty"]],
+        reverse=True
+    )[:7]
+
+    total_difficulty = sum(
+        difficulty_scale[ELEMENT_DB[el]["difficulty"]] for el in scored_elements
+    )
+
+    unique_groups = {ELEMENT_DB[el]["group"] for el in scored_elements}
+    group_bonus = 0.5 * len(unique_groups)
+
+    return {
+        "counted_elements": scored_elements,
+        "difficulty_score": round(total_difficulty, 2),
+        "group_bonus": round(group_bonus, 2),
+        "total_d_score": round(total_difficulty + group_bonus, 2)
+    }
+
+
+# H2 scoring logic
+def calculate_h2_score(routine):
+    seen = set()
+    unique_elements = []
+
+    for element in routine:
+        if element not in ELEMENT_DB:
+            raise ValueError(f"Invalid element: {element}")
+        if element not in seen:
+            seen.add(element)
+            unique_elements.append(element)
+
+    scored_elements = sorted(
+        unique_elements,
+        key=lambda el: difficulty_scale[ELEMENT_DB[el]["difficulty"]],
+        reverse=True
+    )[:8]
+
+    total_difficulty = sum(
+        difficulty_scale[ELEMENT_DB[el]["difficulty"]] for el in scored_elements
+    )
+
+    eligible_groups = {
+    ELEMENT_DB[el]["group"]
+    for el in scored_elements
+    if ELEMENT_DB[el]["difficulty"] >= "B"  # Only B or higher
+}
+    group_bonus = 0.5 * len(eligible_groups)
+
+
+    return {
+        "counted_elements": scored_elements,
+        "difficulty_score": round(total_difficulty, 2),
+        "group_bonus": round(group_bonus, 2),
+        "total_d_score": round(total_difficulty + group_bonus, 2)
+    }
+
+
+# H1 scoring logic
+def calculate_h1_score(routine):
+    seen = set()
+    unique_elements = []
+
+    for element in routine:
+        if element not in ELEMENT_DB:
+            raise ValueError(f"Invalid element: {element}")
+        if element not in seen:
+            seen.add(element)
+            unique_elements.append(element)
+
+    scored_elements = sorted(
+        unique_elements,
+        key=lambda el: difficulty_scale[ELEMENT_DB[el]["difficulty"]],
+        reverse=True
+    )[:10]
+
+    total_difficulty = sum(
+        difficulty_scale[ELEMENT_DB[el]["difficulty"]] for el in scored_elements
+    )
+
+    eligible_groups = {
+    ELEMENT_DB[el]["group"]
+    for el in scored_elements
+    if ELEMENT_DB[el]["difficulty"] >= "C"  # Only B or higher
+}
+    group_bonus = 0.5 * len(eligible_groups)
+
+
+    return {
+        "counted_elements": scored_elements,
+        "difficulty_score": round(total_difficulty, 2),
+        "group_bonus": round(group_bonus, 2),
+        "total_d_score": round(total_difficulty + group_bonus, 2)
+    }
+

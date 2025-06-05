@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gymnastics Routine Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>H5 Routine Builder</h1>
+
+  <div>
+    <label for="element">Add Element:</label>
+    <input type="text" id="element" placeholder="e.g. Iron Cross" />
+    <button onclick="addElement()">Add</button>
+  </div>
+
+  <h2>Routine:</h2>
+  <ul id="routineList"></ul>
+  <button onclick="submitRoutine()">Calculate D-Score</button>
+
+  <h2>Results:</h2>
+  <pre id="result"></pre>
+
+  <script>
+    const routine = [];
+
+    function addElement() {
+      const input = document.getElementById("element");
+      const value = input.value.trim();
+      if (value && !routine.includes(value)) {
+        routine.push(value);
+        const list = document.getElementById("routineList");
+        const item = document.createElement("li");
+        item.textContent = value;
+        list.appendChild(item);
+        input.value = "";
+      }
+    }
+
+    async function submitRoutine() {
+      const response = await fetch("/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ elements: routine })
+      });
+
+      const data = await response.json();
+      document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

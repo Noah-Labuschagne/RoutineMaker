@@ -3,6 +3,7 @@ from routine_logic import calculate_h5_score
 # Example routine with valid element names from your CSV
 test_routine = [
     "Iron Cross",
+    "L Cross",
     "Maltese Cross",
     "Back Uprise to Handstand",
     "Jonasson",
